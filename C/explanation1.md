@@ -1,4 +1,4 @@
-What you changed from AI output and why?
+### What changes did you make to the AI output, and why?
 
 ### Issues I found from AI output
 
