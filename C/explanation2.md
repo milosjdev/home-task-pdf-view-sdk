@@ -1,8 +1,3 @@
-## What you changed from AI output and why
-
-
-
-
 ## How you validated correctness
 
 **WASM verification (mandatory check)**
