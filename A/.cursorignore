@@ -1,0 +1,4 @@
+*.log
+*.bak
+config/*.env
+node_modules/

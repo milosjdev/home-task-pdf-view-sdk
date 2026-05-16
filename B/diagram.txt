@@ -1,0 +1,54 @@
+┌──────────────────────────────────────────────────────────────────┐
+│                       Demo Host App (src/App.tsx)                │
+│   Import PDF → blob URL → <PdfViewer url={…} onClose={…} />      │
+└────────────────────────────────┬─────────────────────────────────┘
+                                 │
+                ┌────────────────▼────────────────┐
+                │      PdfViewer (public SDK)     │
+                │   mode: 'view' | 'edit'         │
+                └────┬──────────────────┬─────────┘
+                     │                  │
+        ┌────────────▼─────┐   ┌────────▼─────────┐
+        │  ViewerToolbar   │   │  EditorToolbar   │
+        │ - nav, zoom/fit  │   │ - reorder/rotate │
+        │ - scroll mode    │   │ - import/extract │
+        │ - quick download │   │ - undo/redo      │
+        └────────┬─────────┘   └────────┬─────────┘
+                 │                      │
+        ┌────────▼─────────┐   ┌────────▼─────────┐
+        │ DocumentScroller │   │  ThumbnailGrid   │
+        │ SinglePageView   │   │ (@dnd-kit)       │
+        │   → PageView     │   │                  │
+        │     → PageCanvas │   └────────┬─────────┘
+        └────────┬─────────┘            │
+                 │                      │
+                 └──────────┬───────────┘
+                            │
+            ┌───────────────▼────────────────┐
+            │   stores/ (Zustand)            │
+            │   viewerStore | editorStore    │
+            └───────────────┬────────────────┘
+                            │
+            ┌───────────────▼────────────────┐
+            │   lib/pdfiumClient.ts          │
+            │   typed postMessage bridge     │
+            └───────────────┬────────────────┘
+                            │ postMessage
+            ┌───────────────▼────────────────┐
+            │   Web Worker                   │
+            │   pdfium.worker.ts             │
+            │    → pdfiumEngine.ts           │
+            │    → RangePdfSource (HTTP)     │
+            │    → render / text / thumbs    │
+            └────────────────────────────────┘
+
+            ┌────────────────────────────────┐
+            │   lib/pdfEditor.ts (pdf-lib)   │
+            │   merge, rotate, export bytes  │
+            │   lib/print.ts (iframe print)  │
+            └────────────────────────────────┘
+
+            ┌────────────────────────────────┐
+            │   hooks/useEditorPreview.ts    │
+            │   merged PDF → OPEN_BYTES      │
+            └────────────────────────────────┘
